@@ -20,7 +20,6 @@ Route::get('admin/register', [AdminController::class, 'register'])->name('admin.
 Route::get('admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 Route::get('admin/fetch-blog', [ApiController::class, 'get_blog'])->name('blog.fetch');
-Route::get('admin/get-categories', [ApiController::class, 'get_categories'])->name('fetch.categories');
 
 Route::group(['middleware' => 'admin'], function() {
 

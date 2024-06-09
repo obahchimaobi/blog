@@ -31,37 +31,29 @@
         <div class="container">
             <div class="row mb-4">
                 <div class="col-sm-6">
-                    <h2 class="posts-entry-title">Business</h2>
+                    <h2 class="posts-entry-title">Weight Loss</h2>
                 </div>
                 <div class="col-sm-6 text-sm-end"><a href="category.html" class="read-more">View All</a></div>
             </div>
             <div class="row g-3">
                 <div class="col-md-9">
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="blog-entry">
-                                <a href="single.html" class="img-link">
-                                    <img src="{{ asset('images/img_1_sq.jpg') }}" alt="Image" class="img-fluid">
-                                </a>
-                                <span class="date">Apr. 14th, 2022</span>
-                                <h2><a href="single.html">Thought you loved Python? Wait until you meet Rust</a></h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, nobis ea quis
-                                    inventore vel voluptas.</p>
-                                <p><a href="single.html" class="btn btn-sm btn-outline-primary">Read More</a></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="blog-entry">
-                                <a href="single.html" class="img-link">
-                                    <img src="{{ asset('images/img_2_sq.jpg') }}" alt="Image" class="img-fluid">
-                                </a>
-                                <span class="date">Apr. 14th, 2022</span>
-                                <h2><a href="single.html">Startup vs corporate: What job suits you best?</a></h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, nobis ea quis
-                                    inventore vel voluptas.</p>
-                                <p><a href="single.html" class="btn btn-sm btn-outline-primary">Read More</a></p>
-                            </div>
-                        </div>
+
+                        @unless (count($weight_loss) == 0)
+                            @foreach ($weight_loss as $items)
+                                <div class="col-md-6">
+                                    <div class="blog-entry">
+                                        <a href="single.html" class="img-link">
+                                            <img src="{{ asset($items->blog_image) }}" alt="Image" class="img-fluid">
+                                        </a>
+                                        <span class="date">{{ $items->created_at }}</span>
+                                        <h2><a href="single.html">{{ $items->blog_title }}</a></h2>
+                                        <p>{{ Str::limit($items->blog_body, '100', '...') }}</p>
+                                        <p><a href="single.html" class="btn btn-sm btn-outline-primary">Read More</a></p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endunless
                     </div>
                 </div>
                 <div class="col-md-3">

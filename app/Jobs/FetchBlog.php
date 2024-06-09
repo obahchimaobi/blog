@@ -29,66 +29,72 @@ class FetchBlog implements ShouldQueue
     {
         //
 
-        $curl = curl_init();
+        $pages = [1, 2, 3];
 
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "https://blogsapi.p.rapidapi.com/?ordering=-date_published",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => [
-                "x-rapidapi-host: blogsapi.p.rapidapi.com",
-                "x-rapidapi-key: 28d2e8bc6emshb59bea3a157666ap103a18jsn88dfa5e1d039"
-            ],
-        ]);
+        foreach ($pages as $page) {
+            $curl = curl_init();
 
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
+            curl_setopt_array($curl, [
+                CURLOPT_URL => "https://blogsapi.p.rapidapi.com/?page={$page}",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => [
+                    "x-rapidapi-host: blogsapi.p.rapidapi.com",
+                    "x-rapidapi-key: 19712ae800msh39302756eeef1abp1b8019jsnc7967b2210ac"
+                ],
+            ]);
 
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        }
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
 
-        $data = json_decode($response, true);
+            if ($err) {
+                echo "cURL Error #:" . $err;
+            }
 
-        if (isset($data['results']) && is_array($data['results'])) {
+            $data = json_decode($response, true);
 
-            foreach ($data['results'] as $result) {
-                $blog_id = $result['id'];
+            if (isset($data['results']) && is_array($data['results'])) {
 
-                // check if blog exists
+                foreach ($data['results'] as $result) {
+                    $blog_id = $result['id'];
 
-                $fetch_blog = BlogDetails::where('blog_id', $blog_id)->first();
+                    // check if blog exists
 
-                if (!$fetch_blog) {
-                    $category_id = $result['category']['id'];
-                    $category_title = $result['category']['title'];
-                    $category_desc = $result['category']['categoryDesc'];
-                    $category_image = $result['category']['categoryImage'];
+                    $fetch_blog = BlogDetails::where('blog_id', $blog_id)->first();
 
-                    $blog_title = $result['title'];
-                    $blog_body = $result['body'];
-                    $blog_tags = $result['tags'];
-                    $blog_image = $result['image'];
+                    if (!$fetch_blog) {
+                        $category_id = $result['category']['id'];
+                        $category_title = $result['category']['title'];
+                        $category_desc = $result['category']['categoryDesc'];
+                        $category_image = $result['category']['categoryImage'];
 
-                    BlogDetails::create([
-                        'blog_id' => $blog_id,
-                        'category_id' => $category_id,
-                        'category_title' => $category_title,
-                        'category_desc' => $category_desc,
-                        'category_image' => $category_image,
-                        'blog_title' => $blog_title,
-                        'blog_body' => $blog_body,
-                        'blog_tags' => $blog_tags,
-                        'blog_image' => $blog_image,
-                        'created_at' => Carbon::now()->format('Y-m-d'),
-                    ]);
+                        $blog_title = $result['title'];
+                        $blog_body = $result['body'];
+                        $blog_tags = $result['tags'];
+                        $blog_image = $result['image'];
 
-                    echo "Blog with id " . $blog_id . " has been inserted \n";
+                        BlogDetails::create([
+                            'blog_id' => $blog_id,
+                            'category_id' => $category_id,
+                            'category_title' => $category_title,
+                            'category_desc' => $category_desc,
+                            'category_image' => $category_image,
+                            'blog_title' => $blog_title,
+                            'blog_body' => $blog_body,
+                            'blog_tags' => $blog_tags,
+                            'blog_image' => $blog_image,
+                            'created_at' => Carbon::now()->format('Y-m-d'),
+                        ]);
+
+                        echo "Blog with id " . $blog_id . " has been inserted \n";
+                    }
                 }
+            } else {
+                echo "Unable to fetch data: " . $err . "\n";
             }
         }
     }

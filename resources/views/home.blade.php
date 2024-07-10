@@ -14,7 +14,7 @@
                                 <div class="featured-img" style="background-image: url('{{ asset($blog->blog_image) }}');"></div>
 
                                 <div class="text">
-                                    <span class="date">{{ $blog->created_at }}</span>
+                                    <span class="date">{{ $blog->created_at->diffForHumans() }}</span>
                                     <h2>{{ $blog->blog_title }}</h2>
                                 </div>
                             </a>
@@ -46,7 +46,7 @@
                                         <a href="single.html" class="img-link">
                                             <img src="{{ asset($items->blog_image) }}" alt="Image" class="img-fluid">
                                         </a>
-                                        <span class="date">{{ $items->created_at }}</span>
+                                        <span class="date">{{ $items->created_at->diffForHumans() }}</span>
                                         <h2><a href="single.html">{{ $items->blog_title }}</a></h2>
                                         <p>{{ Str::limit($items->blog_body, '100', '...') }}</p>
                                         <p><a href="single.html" class="btn btn-sm btn-outline-primary">Read More</a></p>

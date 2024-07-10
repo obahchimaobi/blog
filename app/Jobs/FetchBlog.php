@@ -4,11 +4,11 @@ namespace App\Jobs;
 
 use App\Models\BlogDetails;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Carbon;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class FetchBlog implements ShouldQueue
 {
@@ -37,14 +37,14 @@ class FetchBlog implements ShouldQueue
             curl_setopt_array($curl, [
                 CURLOPT_URL => "https://blogsapi.p.rapidapi.com/?page={$page}",
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
+                CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_CUSTOMREQUEST => 'GET',
                 CURLOPT_HTTPHEADER => [
-                    "x-rapidapi-host: blogsapi.p.rapidapi.com",
-                    "x-rapidapi-key: 19712ae800msh39302756eeef1abp1b8019jsnc7967b2210ac"
+                    'x-rapidapi-host: blogsapi.p.rapidapi.com',
+                    'x-rapidapi-key: 19712ae800msh39302756eeef1abp1b8019jsnc7967b2210ac',
                 ],
             ]);
 
@@ -52,7 +52,7 @@ class FetchBlog implements ShouldQueue
             $err = curl_error($curl);
 
             if ($err) {
-                echo "cURL Error #:" . $err;
+                echo 'cURL Error #:'.$err;
             }
 
             $data = json_decode($response, true);
@@ -66,7 +66,7 @@ class FetchBlog implements ShouldQueue
 
                     $fetch_blog = BlogDetails::where('blog_id', $blog_id)->first();
 
-                    if (!$fetch_blog) {
+                    if (! $fetch_blog) {
                         $category_id = $result['category']['id'];
                         $category_title = $result['category']['title'];
                         $category_desc = $result['category']['categoryDesc'];
@@ -90,11 +90,11 @@ class FetchBlog implements ShouldQueue
                             'created_at' => Carbon::now()->format('Y-m-d'),
                         ]);
 
-                        echo "Blog with id " . $blog_id . " has been inserted \n";
+                        echo 'Blog with id '.$blog_id." has been inserted \n";
                     }
                 }
             } else {
-                echo "Unable to fetch data: " . $err . "\n";
+                echo 'Unable to fetch data: '.$err."\n";
             }
         }
     }
